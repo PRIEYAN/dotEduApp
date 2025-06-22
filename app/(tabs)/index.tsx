@@ -1,75 +1,161 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
+  const [selectedCommunity, setSelectedCommunity] = useState('');
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
+
+  const collegeCommunities = [
+    'Braincell Syndicate',
+    'GPA Funeral Committee',
+    'WiFi Parasite Union',
+    'The 2AM Philosophy Club',
+    'Canteen Cult',
+    'Assignment Avengers',
+    'CTRL+C Community',
+    'The Last-Bench Lorekeepers',
+    'Vibe Attendance Mafia',
+    'Procrastination Prophets',
+    'Cafeteria Conspiracy',
+    'The Untitled Google Docs',
+    'Deadline Diplomats',
+    'Screenshot Parliament',
+    'Mutual Sleep Deprivation Club',
+    'Zoom Zombie League',
+    'Internal Marks Mafia',
+    'Silently Judging Society',
+    'The Unofficial Syllabus Readers',
+    'The Fridge-Raid Fellowship',
+    'Notes Black Market',
+    'The "Group Project is Me" Guild',
+    'Attendance Alibi Association',
+    'Backlog Brotherhood',
+    'Brain Buffering Association'
+  ];
+
+  useEffect(() => {
+    // Select a random community name when component mounts
+    const randomIndex = Math.floor(Math.random() * collegeCommunities.length);
+    setSelectedCommunity(collegeCommunities[randomIndex]);
+  }, []);
+
+  const handleGetStarted = () => {
+    console.log('Button pressed, navigating to login...');
+    try {
+      router.push('/login');
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={styles.container}>
+      
+      <View style={styles.content}>
+        <View style={styles.welcomeSection}>
+          <Text style={styles.welcomeTitle}>Welcome to .Edu</Text>
+          <Text style={styles.welcomeSubtitle}>{selectedCommunity}</Text>
+        </View>
+        
+        <TouchableOpacity 
+          style={[
+            styles.getStartedButton,
+            isButtonPressed && styles.getStartedButtonPressed
+          ]} 
+          activeOpacity={1}
+          onPressIn={() => setIsButtonPressed(true)}
+          onPressOut={() => setIsButtonPressed(false)}
+          onPress={handleGetStarted}
+        >
+          {isButtonPressed ? (
+            <LinearGradient
+              colors={['white', '#f8b55f', 'white']}
+              style={styles.gradientBackground}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+            >
+              <Text style={[styles.buttonText, styles.buttonTextPressed]}>Here we go!</Text>
+            </LinearGradient>
+          ) : (
+            <Text style={styles.buttonText}>Here we go!</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    position: 'relative',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  backgroundLogo: {
     position: 'absolute',
+    top: '31%',
+    left: '82%',
+    transform: [{ rotate: '20deg' }],
+    opacity: 0.9,
+  },
+  logoImage: {
+    width: 50,
+    height: 50,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  welcomeSection: {
+    alignItems: 'center',
+    marginBottom: 70,
+  },
+  welcomeTitle: {
+    fontSize: 42,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 5,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  welcomeSubtitle: {
+    fontSize: 15,
+    color: '#666',
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+  getStartedButton: {
+    backgroundColor: '#f8b55f',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    overflow: 'hidden',
+  },
+  getStartedButtonPressed: {
+    backgroundColor: 'transparent',
+  },
+  gradientBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '300',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  buttonTextPressed: {
+    color: 'black',
   },
 });
