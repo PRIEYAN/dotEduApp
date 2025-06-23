@@ -6,7 +6,7 @@ export default function LoginScreen() {
   const Register = () => {
     console.log('Button pressed, navigating to login...');
     try {
-      router.push('/login');
+      router.push('/register');
       console.log('Navigation command sent');
     } catch (error) {
       console.error('Navigation failed:', error);
