@@ -1,4 +1,3 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -45,8 +44,9 @@ export default function HomeScreen() {
     console.log('Button pressed, navigating to login...');
     try {
       router.push('/login');
+      console.log('Navigation command sent');
     } catch (error) {
-      console.error('Navigation error:', error);
+      console.error('Navigation failed:', error);
     }
   };
 
@@ -60,27 +60,10 @@ export default function HomeScreen() {
         </View>
         
         <TouchableOpacity 
-          style={[
-            styles.getStartedButton,
-            isButtonPressed && styles.getStartedButtonPressed
-          ]} 
-          activeOpacity={1}
-          onPressIn={() => setIsButtonPressed(true)}
-          onPressOut={() => setIsButtonPressed(false)}
+          style={styles.getStartedButton}
           onPress={handleGetStarted}
         >
-          {isButtonPressed ? (
-            <LinearGradient
-              colors={['white', '#f8b55f', 'white']}
-              style={styles.gradientBackground}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-            >
-              <Text style={[styles.buttonText, styles.buttonTextPressed]}>Here we go!</Text>
-            </LinearGradient>
-          ) : (
-            <Text style={styles.buttonText}>Here we go!</Text>
-          )}
+          <Text style={styles.buttonText}>Here we go!</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -130,7 +113,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   getStartedButton: {
-    backgroundColor: '#f8b55f',
+    backgroundColor: '#3d365c',
     paddingHorizontal: 20,
     paddingVertical: 16,
     overflow: 'hidden',
